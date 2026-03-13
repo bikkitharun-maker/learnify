@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import CourseCard from '../components/CourseCard';
-import { FiSearch, FiArrowRight, FiCode, FiCpu, FiGlobe, FiUsers, FiStar, FiBookOpen, FiAward, FiTrendingUp, FiShield, FiZap } from 'react-icons/fi';
+import { FiSearch, FiArrowRight, FiCode, FiCpu, FiUsers, FiStar, FiBookOpen, FiAward } from 'react-icons/fi';
 
 const FEATURES = [
   { icon: '🎯', color: 'rgba(99,102,241,0.15)', border: 'rgba(99,102,241,0.3)', label: 'Expert Instructors', desc: 'Learn from industry professionals with 10+ years of real-world experience at top tech companies.' },
@@ -14,10 +14,9 @@ const FEATURES = [
 ];
 
 const CATEGORIES = [
-  { id: 'all',             label: 'All Courses', icon: <FiBookOpen />,   count: 12 },
-  { id: 'web-development', label: 'Web Dev',     icon: <FiCode />,      count: 4  },
-  { id: 'languages',       label: 'Languages',   icon: <FiGlobe />,     count: 4  },
-  { id: 'ai',              label: 'AI & ML',     icon: <FiCpu />,       count: 4  },
+  { id: 'all',             label: 'All Courses', icon: <FiBookOpen />, count: 12 },
+  { id: 'web-development', label: 'Web Dev',     icon: <FiCode />,     count: 4  },
+  { id: 'ai',              label: 'AI & ML',     icon: <FiCpu />,      count: 4  },
 ];
 
 export default function Home() {
