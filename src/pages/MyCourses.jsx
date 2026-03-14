@@ -2,19 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
-import { FiPlay, FiAward, FiClock, FiUsers, FiBookOpen } from 'react-icons/fi';
+import { FiPlay, FiAward, FiClock, FiUsers, FiBookOpen, FiUser } from 'react-icons/fi';
 
 export default function MyCourses() {
   const { user, enrollments } = useAuth();
   const navigate = useNavigate();
-  const [courses, setCourses]   = useState([]);
-  const [loading, setLoading]   = useState(true);
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!enrollments.length) { setLoading(false); return; }
     Promise.all(enrollments.map(e => axios.get(`/api/courses/${e.courseId}`).then(r => ({
       ...r.data,
-      progress:   e.progress,
+      progress: e.progress,
       enrolledAt: e.enrolledAt,
     }))))
       .then(setCourses)
@@ -42,7 +42,7 @@ export default function MyCourses() {
             </div>
             <div className="d-flex gap-3">
               {[
-                { label: 'Enrolled',  val: courses.length, icon: <FiBookOpen /> },
+                { label: 'Enrolled', val: courses.length, icon: <FiBookOpen /> },
                 { label: 'In Progress', val: courses.filter(c => c.progress > 0 && c.progress < 100).length, icon: <FiPlay /> },
                 { label: 'Completed', val: courses.filter(c => c.progress === 100).length, icon: <FiAward /> },
               ].map((s, i) => (
@@ -73,68 +73,55 @@ export default function MyCourses() {
           ) : (
             <div className="row g-4">
               {courses.map((course, i) => (
-                <div key={course.id} className={`col-12 col-md-6 col-lg-4 anim-up delay-${Math.min(i+1,5)}`}>
+                <div key={course.id} className={`col-12 col-md-6 col-lg-4 anim-up delay-${Math.min(i + 1, 5)}`}>
                   <div className="enrolled-card">
                     <div style={{ position: 'relative' }}>
                       <img src={course.thumbnail} className="enrolled-thumb" alt={course.title} />
-                      <div style={{
-                        position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.35)',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        opacity: 0, transition: 'var(--transition)',
-                      }}
-                        onMouseEnter={e => e.currentTarget.style.opacity = 1}
-                        onMouseLeave={e => e.currentTarget.style.opacity = 0}
+                      <div className="enrolled-overlay"
+                        onClick={() => navigate(`/courses/${course.id}`)}
                       >
-                        <button
-                          className="btn-brand"
-                          onClick={() => navigate(`/courses/${course.id}`)}
-                          style={{ padding: '0.6rem 1.4rem' }}
-                        >
-                          <FiPlay /> Continue
-                        </button>
+                        <button className="btn-brand"> <FiPlay /> Continue </button>
                       </div>
-                      <div style={{ position: 'absolute', top: 10, right: 10 }}>
-                        <span style={{ background: 'rgba(0,0,0,0.7)', color: course.progress === 100 ? 'var(--emerald-400)' : 'var(--amber-400)', border: `1px solid ${course.progress === 100 ? 'rgba(52,211,153,0.4)' : 'rgba(251,191,36,0.4)'}`, borderRadius: 50, fontSize: '0.72rem', fontWeight: 700, padding: '3px 10px', backdropFilter: 'blur(6px)' }}>
-                          {course.progress === 100 ? '✓ Complete' : `${course.progress}% done`}
-                        </span>
-                      </div>
+                      <span className={`progress-badge ${course.progress === 100 ? 'complete' : ''}`}>
+                        {course.progress === 100 ? '✓ Complete' : `${course.progress}%`}
+                      </span>
                     </div>
 
-                    <div style={{ padding: '1.2rem' }}>
-                      <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--brand-400)', background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: 50, padding: '2px 9px', textTransform: 'capitalize', display: 'inline-block', marginBottom: '0.5rem' }}>
+                    <div className="enrolled-body">
+                      <span className="category-chip">
                         {course.category.replace('-', ' ')}
                       </span>
 
-                      <h5 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1rem', lineHeight: 1.35, marginBottom: '0.5rem' }}>
+                      <h5 className="course-title-enrolled">
                         {course.title}
                       </h5>
 
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: '0.8rem' }}>
-                        <img src={course.instructorAvatar} alt="" style={{ width: 20, height: 20, borderRadius: '50%', objectFit: 'cover' }} />
-                        <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{course.instructor}</span>
+                      <div className="instructor-row">
+                        <FiUser size={16} />
+                        <span className="instructor-name">{course.instructor}</span>
                       </div>
 
-                      <div className="d-flex gap-3 mb-3" style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><FiClock size={11} />{course.duration}</span>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><FiBookOpen size={11} />{course.lectures} lectures</span>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><FiUsers size={11} />{(course.students/1000).toFixed(1)}k</span>
+                      <div className="meta-row-enrolled">
+                        <span><FiClock size={11} />{course.duration}</span>
+                        <span><FiBookOpen size={11} />{course.lectures} lectures</span>
+                        <span><FiUsers size={11} />{(course.students / 1000).toFixed(1)}k</span>
                       </div>
 
-                      {/* Progress */}
-                      <div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: 5 }}>
+                      <div className="progress-section">
+                        <div className="progress-label">
                           <span>Progress</span>
-                          <span style={{ fontWeight: 700, color: course.progress === 100 ? 'var(--emerald-400)' : 'var(--brand-400)' }}>{course.progress}%</span>
+                          <span className={`progress-pct ${course.progress === 100 ? 'complete' : ''}`}>
+                            {course.progress}%
+                          </span>
                         </div>
                         <div className="progress-bar-wrap">
-                          <div className="progress-fill" style={{ width: `${course.progress}%` }} />
+                          <div className={`progress-fill ${course.progress === 100 ? 'complete' : ''}`} style={{ width: `${course.progress}%` }} />
                         </div>
                       </div>
 
-                      <div className="d-flex gap-2 mt-3">
+                      <div className="enrolled-actions">
                         <button
                           className="btn-brand"
-                          style={{ flex: 1, justifyContent: 'center', padding: '0.55rem', fontSize: '0.85rem' }}
                           onClick={() => navigate(`/courses/${course.id}`)}
                         >
                           <FiPlay size={13} />
@@ -142,14 +129,13 @@ export default function MyCourses() {
                         </button>
                         <button
                           className="btn-brand-outline"
-                          style={{ padding: '0.55rem 0.9rem', fontSize: '0.85rem' }}
                           title="Certificate"
                         >
                           <FiAward size={14} />
                         </button>
                       </div>
 
-                      <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '0.6rem', textAlign: 'center' }}>
+                      <div className="enrolled-date">
                         Enrolled {new Date(course.enrolledAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                       </div>
                     </div>

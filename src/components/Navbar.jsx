@@ -3,7 +3,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import { FiSearch, FiMenu, FiX, FiLogOut, FiBookOpen, FiHome, FiAward } from 'react-icons/fi';
+import { FiSearch, FiMenu, FiX, FiLogOut, FiBookOpen, FiHome, FiAward, FiUser } from 'react-icons/fi';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -107,8 +107,8 @@ export default function Navbar() {
 
           {/* Desktop Nav Links */}
           <div className="d-none d-lg-flex align-items-center gap-1">
-            <NavLink to="/"         end className={({ isActive }) => `nav-pill${isActive ? ' active' : ''}`}><FiHome className="me-1" />Home</NavLink>
-            <NavLink to="/courses"      className={({ isActive }) => `nav-pill${isActive ? ' active' : ''}`}><FiBookOpen className="me-1" />Courses</NavLink>
+            <NavLink to="/" end className={({ isActive }) => `nav-pill${isActive ? ' active' : ''}`}><FiHome className="me-1" />Home</NavLink>
+            <NavLink to="/courses" className={({ isActive }) => `nav-pill${isActive ? ' active' : ''}`}><FiBookOpen className="me-1" />Courses</NavLink>
             {user && <NavLink to="/my-courses" className={({ isActive }) => `nav-pill${isActive ? ' active' : ''}`}><FiAward className="me-1" />My Learning</NavLink>}
           </div>
 
@@ -117,7 +117,9 @@ export default function Navbar() {
             {user ? (
               <>
                 <div className="user-chip">
-                  <img src={user.avatar} alt={user.name} />
+                  <svg className="profile-logo" viewBox="0 0 24 24" fill="currentColor" aria-label="Profile">
+                    <path d="M12 2L12.62 7L17.62 7L14 10.25L14.75 15.25L12 13L9.25 15.25L10 10.25L6.38 7L11.38 7L12 2Z" />
+                  </svg>
                   <span className="user-chip-name">{user.name.split(' ')[0]}</span>
                 </div>
                 <button className="btn-brand-outline" style={{ padding: '0.42rem 1rem', fontSize: '0.83rem' }} onClick={handleLogout}>
@@ -126,8 +128,8 @@ export default function Navbar() {
               </>
             ) : (
               <>
-                <Link to="/login"    className="btn-brand-outline" style={{ padding: '0.42rem 1.1rem', fontSize: '0.85rem' }}>Log in</Link>
-                <Link to="/register" className="btn-brand"         style={{ padding: '0.45rem 1.2rem', fontSize: '0.85rem' }}>Get Started</Link>
+                <Link to="/login" className="btn-brand-outline" style={{ padding: '0.42rem 1.1rem', fontSize: '0.85rem' }}>Log in</Link>
+                <Link to="/register" className="btn-brand" style={{ padding: '0.45rem 1.2rem', fontSize: '0.85rem' }}>Get Started</Link>
               </>
             )}
           </div>
@@ -146,19 +148,18 @@ export default function Navbar() {
               <form onSubmit={doSearch}>
                 <span className="lms-search-icon"><FiSearch /></span>
                 <input
-                  className="lms-search"
+                  className="lms-search mobile-search-input"
                   type="text"
                   placeholder="Search courses..."
                   value={query}
                   onChange={handleInput}
-                  style={{ width: '100%', paddingLeft: '2.6rem' }}
                 />
               </form>
             </div>
 
             <div className="d-flex flex-column gap-1 mb-3">
-              <NavLink to="/"         end className={({ isActive }) => `nav-pill${isActive ? ' active' : ''}`} onClick={() => setMobileOpen(false)}><FiHome className="me-1" />Home</NavLink>
-              <NavLink to="/courses"      className={({ isActive }) => `nav-pill${isActive ? ' active' : ''}`} onClick={() => setMobileOpen(false)}><FiBookOpen className="me-1" />Courses</NavLink>
+              <NavLink to="/" end className={({ isActive }) => `nav-pill${isActive ? ' active' : ''}`} onClick={() => setMobileOpen(false)}><FiHome className="me-1" />Home</NavLink>
+              <NavLink to="/courses" className={({ isActive }) => `nav-pill${isActive ? ' active' : ''}`} onClick={() => setMobileOpen(false)}><FiBookOpen className="me-1" />Courses</NavLink>
               {user && <NavLink to="/my-courses" className={({ isActive }) => `nav-pill${isActive ? ' active' : ''}`} onClick={() => setMobileOpen(false)}><FiAward className="me-1" />My Learning</NavLink>}
             </div>
 
@@ -166,7 +167,9 @@ export default function Navbar() {
 
             {user ? (
               <div className="d-flex align-items-center gap-2">
-                <img src={user.avatar} alt="" style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover' }} />
+                <svg className="profile-logo profile-logo-lg" viewBox="0 0 32 32" fill="currentColor" aria-label="Profile">
+                  <path d="M12 2L12.62 7L17.62 7L14 10.25L14.75 15.25L12 13L9.25 15.25L10 10.25L6.38 7L11.38 7L12 2Z" stroke="currentColor" strokeWidth="1.5" />
+                </svg>
                 <div>
                   <div style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--text-primary)' }}>{user.name}</div>
                   <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{user.email}</div>
@@ -177,8 +180,8 @@ export default function Navbar() {
               </div>
             ) : (
               <div className="d-flex gap-2">
-                <Link to="/login"    className="btn-brand-outline flex-fill text-center" onClick={() => setMobileOpen(false)} style={{ padding: '0.5rem' }}>Log in</Link>
-                <Link to="/register" className="btn-brand flex-fill text-center"         onClick={() => setMobileOpen(false)} style={{ padding: '0.5rem' }}>Get Started</Link>
+                <Link to="/login" className="btn-brand-outline flex-fill text-center" onClick={() => setMobileOpen(false)} style={{ padding: '0.5rem' }}>Log in</Link>
+                <Link to="/register" className="btn-brand flex-fill text-center" onClick={() => setMobileOpen(false)} style={{ padding: '0.5rem' }}>Get Started</Link>
               </div>
             )}
           </div>

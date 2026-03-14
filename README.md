@@ -18,7 +18,7 @@ npm start
 
 This runs:
 - **Frontend** → http://localhost:3000
-- **JSON Server (API)** → http://localhost:3001
+- **JSON Server (API)** → http://localhost:3001x
 
 ### Or run separately:
 ```bash

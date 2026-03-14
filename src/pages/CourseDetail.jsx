@@ -6,10 +6,10 @@ import { useAuth } from '../context/AuthContext';
 import { FiClock, FiUsers, FiStar, FiBookOpen, FiGlobe, FiCheck, FiLock, FiPlay, FiArrowLeft, FiVideo, FiAward } from 'react-icons/fi';
 
 export default function CourseDetail() {
-  const { id }   = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
   const { user, enroll, isEnrolled } = useAuth();
-  const [course, setCourse]   = useState(null);
+  const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [enrolling, setEnrolling] = useState(false);
   const enrolled = course ? isEnrolled(course.id) : false;
@@ -81,8 +81,6 @@ export default function CourseDetail() {
 
               {/* Instructor */}
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '1rem 1.2rem', background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius)', marginBottom: '1.25rem' }}>
-                <img src={course.instructorAvatar} alt={course.instructor}
-                  style={{ width: 52, height: 52, borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--border-medium)' }} />
                 <div>
                   <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: 2 }}>Course Instructor</div>
                   <div style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.95rem' }}>{course.instructor}</div>

@@ -6,11 +6,12 @@ import { FiUser, FiMail, FiLock, FiEye, FiEyeOff, FiArrowRight, FiCheck } from '
 
 export default function Register() {
   const { register } = useAuth();
-  const navigate     = useNavigate();
-  const [form, setForm]       = useState({ name: '', email: '', password: '', confirm: '' });
+  const navigate = useNavigate();
+  const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '' });
   const [showPass, setShowPass] = useState(false);
+  const [showConfirmPass, setShowConfirmPass] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState('');
+  const [error, setError] = useState('');
 
   const handle = e => { setForm(p => ({ ...p, [e.target.name]: e.target.value })); setError(''); };
 
@@ -49,7 +50,7 @@ export default function Register() {
 
   return (
     <div className="auth-page">
-      <div className="auth-card" style={{ maxWidth: 480 }}>
+      <div className="auth-card">
         <div className="auth-logo">
           <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.8rem', background: 'linear-gradient(120deg, #a5b4fc, #fbbf24)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
             ⚡ Learnify
@@ -98,7 +99,7 @@ export default function Register() {
             </div>
             {form.password && (
               <div style={{ marginTop: 6, display: 'flex', gap: 4 }}>
-                {[1,2,3,4].map(n => (
+                {[1, 2, 3, 4].map(n => (
                   <div key={n} style={{ flex: 1, height: 3, borderRadius: 99, background: n <= strength.score ? strength.color : 'var(--border-subtle)', transition: 'background 0.3s' }} />
                 ))}
                 <span style={{ fontSize: '0.72rem', color: strength.color, marginLeft: 6, fontWeight: 600, whiteSpace: 'nowrap' }}>{strength.label}</span>
@@ -108,11 +109,14 @@ export default function Register() {
 
           <div className="form-group">
             <label className="form-label">Confirm Password</label>
-            <div className="input-icon-wrap">
+            <div className="input-icon-wrap" style={{ position: 'relative' }}>
               <FiLock className="input-icon" />
-              <input className="form-input has-icon" name="confirm" type="password" placeholder="Repeat your password" value={form.confirm} onChange={handle} autoComplete="new-password" />
+              <input className="form-input has-icon" name="confirm" type={showConfirmPass ? 'text' : 'password'} placeholder="Repeat your password" value={form.confirm} onChange={handle} autoComplete="new-password" style={{ paddingRight: '2.6rem' }} />
+              <button type="button" className="password-toggle" onClick={() => setShowConfirmPass(!showConfirmPass)}>
+                {showConfirmPass ? <FiEyeOff /> : <FiEye />}
+              </button>
               {form.confirm && form.password === form.confirm && (
-                <FiCheck style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--emerald-400)' }} />
+                <FiCheck style={{ position: 'absolute', right: 48, top: '50%', transform: 'translateY(-50%)', color: 'var(--emerald-400)' }} />
               )}
             </div>
           </div>

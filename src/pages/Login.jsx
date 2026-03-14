@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
-import { FiMail, FiLock, FiEye, FiEyeOff, FiArrowRight } from 'react-icons/fi';
+import { FiUser, FiMail, FiLock, FiEye, FiEyeOff, FiArrowRight } from 'react-icons/fi';
 
 export default function Login() {
   const { login } = useAuth();
-  const navigate  = useNavigate();
-  const [form, setForm]       = useState({ email: '', password: '' });
+  const navigate = useNavigate();
+  const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState('');
+  const [error, setError] = useState('');
 
   const handle = e => { setForm(p => ({ ...p, [e.target.name]: e.target.value })); setError(''); };
 
@@ -50,6 +50,22 @@ export default function Login() {
         )}
 
         <form onSubmit={submit}>
+          <div className="form-group">
+            <label className="form-label">Username</label>
+            <div className="input-icon-wrap">
+              <FiUser className="input-icon" />
+              <input
+                className="form-input has-icon"
+                name="name"
+                type="text"
+                placeholder="Your username"
+                value={form.name}
+                onChange={handle}
+                autoComplete="username"
+              />
+            </div>
+          </div>
+
           <div className="form-group">
             <label className="form-label">Email address</label>
             <div className="input-icon-wrap">
